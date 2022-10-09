@@ -11,15 +11,15 @@ Using GraphQL queries in page components uses a slightly different syntax from q
 const BlogPage = ({ data }) => {
   return (
     <Layout pageTitle="My Blog Posts">
-      <ul>
       {
-        data.allFile.nodes.map(node => (
-          <li key={node.name}>
-            {node.name}
-          </li>
+        data.allMdx.nodes.map((node) => (
+          <article key={node.id}>
+            <h2>{node.frontmatter.title}</h2>
+            <p>Posted: {node.frontmatter.date}</p>
+            <p>{node.excerpt}</p>
+          </article>
         ))
       }
-      </ul>
     </Layout>
   )
 }
@@ -27,23 +27,19 @@ const BlogPage = ({ data }) => {
 // when building, (not running) outside query is automatically run and get result, then the result will be passed into the component as a 'data' prop. (this is also automatical)
 export const query = graphql`
   query {
-    allFile {
-      nodes {
-        name
-      }
-    }
-    site {
-        siteMetadata {
-          title
+    allMdx(sort: {fields: frontmatter___date, order: DESC}) {
+        nodes {
+          frontmatter {
+            date(formatString: "MMMM D, YYYY")
+            title
+          }
+          id
+          excerpt
         }
-    }
+      }
   }
 `;
 
-export const Head = ({ data }) => (
-    <>
-      <title>{data.site.siteMetadata.title}</title>
-    </>
-  )
+export const Head = () => <Seo title="My Blog Posts" />
 
 export default BlogPage
