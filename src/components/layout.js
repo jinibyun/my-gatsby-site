@@ -40,6 +40,11 @@ const Layout = ({ pageTitle, children }) => {
               Blog
             </Link>
           </li>
+          <li className={navLinkItem}>
+            <Link to="/wp" className={navLinkText}>
+              Wordpress Blog
+            </Link>
+          </li>
         </ul>
       </nav>
       <main>
